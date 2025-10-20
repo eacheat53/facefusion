@@ -35,7 +35,7 @@ jobs:
      python-version: '3.12'
   - run: python install.py --onnxruntime default --skip-conda
   - run: pip install pytest
-  - run: pytest
+  - run: pytest -p tests.mock_fatal_exit
  report:
   needs: test
   runs-on: ubuntu-latest
@@ -52,7 +52,7 @@ jobs:
   - run: pip install coveralls
   - run: pip install pytest
   - run: pip install pytest-cov
-  - run: pytest tests --cov facefusion
+  - run: pytest tests --cov facefusion -p tests.mock_fatal_exit
   - run: coveralls --service github
     env:
      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
