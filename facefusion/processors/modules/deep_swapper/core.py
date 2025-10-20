@@ -19,15 +19,11 @@ from facefusion.filesystem import get_file_name, in_directory, is_image, is_vide
 from facefusion.processors.modules.deep_swapper.types import DeepSwapperInputs, DeepSwapperMorph
 from facefusion.processors.modules.deep_swapper import choices as processor_choices
 from facefusion import translator
-from facefusion.processors.modules.deep_swapper.locals import LOCALS
 from facefusion.program_helper import find_argument_group
 from facefusion.thread_helper import thread_semaphore
 from facefusion.types import ApplyStateItem, Args, DownloadScope, Face, InferencePool, Mask, ModelOptions, ModelSet, ProcessMode, VisionFrame
 from facefusion.vision import conditional_match_frame_color, read_static_image, read_static_video_frame
 
-
-
-translator.load(LOCALS, __name__)
 
 @lru_cache()
 def create_static_model_set(download_scope : DownloadScope) -> ModelSet:

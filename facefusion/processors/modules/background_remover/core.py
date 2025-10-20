@@ -16,16 +16,12 @@ from facefusion.normalizer import normalize_color
 from facefusion.processors.modules.background_remover.types import BackgroundRemoverInputs
 from facefusion.processors.modules.background_remover import choices as processor_choices
 from facefusion import translator
-from facefusion.processors.modules.background_remover.locals import LOCALS
 from facefusion.program_helper import find_argument_group
 from facefusion.sanitizer import sanitize_int_range
 from facefusion.thread_helper import thread_semaphore
 from facefusion.types import ApplyStateItem, Args, DownloadScope, ExecutionProvider, InferencePool, Mask, ModelOptions, ModelSet, ProcessMode, VisionFrame
 from facefusion.vision import read_static_image, read_static_video_frame
 
-
-
-translator.load(LOCALS, __name__)
 
 @lru_cache()
 def create_static_model_set(download_scope : DownloadScope) -> ModelSet:

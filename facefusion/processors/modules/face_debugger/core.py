@@ -14,14 +14,10 @@ from facefusion.filesystem import in_directory, is_image, is_video, same_file_ex
 from facefusion.processors.modules.face_debugger.types import FaceDebuggerInputs
 from facefusion.processors.modules.face_debugger import choices as processor_choices
 from facefusion import translator
-from facefusion.processors.modules.face_debugger.locals import LOCALS
 from facefusion.program_helper import find_argument_group
 from facefusion.types import ApplyStateItem, Args, Face, InferencePool, ProcessMode, VisionFrame
 from facefusion.vision import read_static_image, read_static_video_frame
 
-
-
-translator.load(LOCALS, __name__)
 
 def get_inference_pool() -> InferencePool:
 	pass
