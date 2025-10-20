@@ -17,6 +17,8 @@ from facefusion.processors.modules.background_remover.types import BackgroundRem
 from facefusion.processors.modules.background_remover import choices as processor_choices
 from facefusion import translator
 from facefusion.program_helper import find_argument_group
+
+MODULE_SCOPE = 'facefusion.processors.modules.background_remover'
 from facefusion.sanitizer import sanitize_int_range
 from facefusion.thread_helper import thread_semaphore
 from facefusion.types import ApplyStateItem, Args, DownloadScope, ExecutionProvider, InferencePool, Mask, ModelOptions, ModelSet, ProcessMode, VisionFrame
@@ -320,8 +322,8 @@ def get_model_options() -> ModelOptions:
 def register_args(program : ArgumentParser) -> None:
 	group_processors = find_argument_group(program, 'processors')
 	if group_processors:
-		group_processors.add_argument('--background-remover-model', help = translator.get('background_remover_help.model', __name__), default = config.get_str_value('processors', 'background_remover_model', 'rmbg_2.0'), choices = processor_choices.background_remover_models)
-		group_processors.add_argument('--background-remover-color', help = translator.get('background_remover_help.color', __name__), type = partial(sanitize_int_range, int_range = processor_choices.background_remover_color_range), default = config.get_int_list('processors', 'background_remover_color', '0 255 0 255'), nargs = '+')
+		group_processors.add_argument('--background-remover-model', help = translator.get('help.model', MODULE_SCOPE), default = config.get_str_value('processors', 'background_remover_model', 'rmbg_2.0'), choices = processor_choices.background_remover_models)
+		group_processors.add_argument('--background-remover-color', help = translator.get('help.color', MODULE_SCOPE), type = partial(sanitize_int_range, int_range = processor_choices.background_remover_color_range), default = config.get_int_list('processors', 'background_remover_color', '0 255 0 255'), nargs = '+')
 		facefusion.jobs.job_store.register_step_keys([ 'background_remover_model', 'background_remover_color' ])
 
 
