@@ -20,7 +20,6 @@ jobs:
   - run: mypy facefusion.py install.py
   - run: mypy facefusion tests
  report:
-  needs: test
   runs-on: ubuntu-latest
   steps:
   - name: Checkout
