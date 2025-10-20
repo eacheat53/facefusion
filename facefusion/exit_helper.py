@@ -10,7 +10,7 @@ from facefusion.types import ErrorCode
 
 
 def fatal_exit(error_code : ErrorCode) -> None:
-	os._exit(error_code)
+	sys.exit(error_code)
 
 
 def hard_exit(error_code : ErrorCode) -> None:
