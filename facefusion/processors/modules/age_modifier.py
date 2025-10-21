@@ -198,8 +198,15 @@ def forward(crop_vision_frame: VisionFrame, extend_vision_frame: VisionFrame, ag
     age_modifier = get_inference_pool().get('age_modifier')
     age_modifier_inputs = {}
 
+<<<<<<< HEAD
     if is_macos() and has_execution_provider('coreml'):
         age_modifier.set_providers([facefusion.choices.execution_provider_set.get('cpu')])
+=======
+	if target_faces:
+		for target_face in target_faces:
+			target_face = scale_face(target_face, target_vision_frame, temp_vision_frame)
+			temp_vision_frame = modify_age(target_face, temp_vision_frame)
+>>>>>>> f3be23d19be842c1ddda7f6a94f6efe0f1157538
 
     # 兼容不同输入名
     for age_modifier_input in age_modifier.get_inputs():
