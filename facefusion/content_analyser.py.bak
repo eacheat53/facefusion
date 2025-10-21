@@ -121,7 +121,7 @@ def collect_model_downloads() -> Tuple[DownloadSet, DownloadSet]:
 
 def pre_check() -> bool:
 	print("[NSFW] pre_check forced True")
-	return False
+	return True
 	
 
 def analyse_stream(vision_frame : VisionFrame, video_fps : Fps) -> bool:

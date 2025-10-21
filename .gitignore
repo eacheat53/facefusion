@@ -4,3 +4,5 @@ __pycache__
 .jobs
 .idea
 .vscode
+wzf3.12
+tensorrt-10.13.0.35

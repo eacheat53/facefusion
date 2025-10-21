@@ -31,86 +31,87 @@ from facefusion.vision import detect_image_resolution, detect_video_resolution, 
 
 
 def cli() -> None:
-
+	print("[CORE] cli enter")
 	if pre_check():
-		
+		print("[CORE] pre_check OK") 
 		signal.signal(signal.SIGINT, signal_exit)
 		program = create_program()
 
 		if validate_args(program):
+			print("[CORE] validate_args OK")
 			args = vars(program.parse_args())
-			
+			print("[CORE] parsed args:", args)
 			apply_args(args, state_manager.init_item)
 
 			cmd = state_manager.get_item('command')
-		
+			print("[CORE] state_manager command:", cmd)
 			if cmd:
 				logger.init(state_manager.get_item('log_level'))
-				
+				print("[CORE] about to route")
 				route(args)
-				
+				print("[CORE] route returned")
 			else:
-				
+				print("[CORE] no command -> help")
 				program.print_help()
 		else:
-		
+			print("[CORE] validate_args FAIL")
 			hard_exit(2)
 	else:
-		
+		print("[CORE] pre_check FAIL") 
 		hard_exit(2)
 
 
 
 def route(args : Args) -> None:
-	
+	print("[CORE] route enter")
 	system_memory_limit = state_manager.get_item('system_memory_limit')
-
+	print("[CORE] system_memory_limit =", system_memory_limit)
 
 	if system_memory_limit and system_memory_limit > 0:
-		
+		print("[CORE] limiting system memory")
 		limit_system_memory(system_memory_limit)
 
 	cmd = state_manager.get_item('command')
-	
+	print("[CORE] command =", cmd)
 
 	if cmd == 'force-download':
-	
+		print("[CORE] route: force-download")
 		error_code = force_download()
-		
+		print("[CORE] force-download exit code:", error_code)
 		hard_exit(error_code)
 
 	if cmd == 'benchmark':
-	
+		print("[CORE] route: benchmark (pre_checks)")
 		ok_common = common_pre_check()
 		ok_processors = processors_pre_check()
 		ok_bench = benchmarker.pre_check()
-	
+		print("[CORE] pre_checks:", ok_common, ok_processors, ok_bench)
 		if not ok_common or not ok_processors or not ok_bench:
-	
+			print("[CORE] benchmark pre_check FAIL")
 			hard_exit(2)
-	
+		print("[CORE] benchmark render()")
 		benchmarker.render()
-	
+		print("[CORE] benchmark render returned")
 		return
 
-	
-
+	# 其他分支未贴出来时，为了定位，给个兜底打印
+	print("[CORE] route: no matching branch for command ->", cmd)
 
 	if cmd == 'run':
-	
+		print("[CORE] route: run (pre_checks)")
 		ok_common = common_pre_check()
 		ok_processors = processors_pre_check()
-		
+		print("[CORE] pre_checks:", ok_common, ok_processors)
 		if not ok_processors:
-		
+			print("[CORE] processors_pre_check FAIL")
 			hard_exit(2)
 
-
+		print("[UI] init enter")
 		from facefusion.uis.core import init as ui_init, launch as ui_launch
 		ui_init()
-	
+		print("[UI] launch enter")
 		ui_launch()
-
+		print("[CORE] run done")
 		return
 
 
@@ -166,8 +167,21 @@ def pre_check() -> bool:
 
 
 def common_pre_check() -> bool:
-	return True
+	common_modules =\
+	[
+		content_analyser,
+		face_classifier,
+		face_detector,
+		face_landmarker,
+		face_masker,
+		face_recognizer,
+		voice_extractor
+	]
 
+	content_analyser_content = inspect.getsource(content_analyser).encode()
+	content_analyser_hash = hash_helper.create_hash(content_analyser_content)
+
+	return all(module.pre_check() for module in common_modules) and content_analyser_hash == '803b5ec7'
 
 
 def processors_pre_check() -> bool:
